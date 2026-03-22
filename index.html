@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OffCourt Sneakers</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="page-nav">
+    <a href="index.html" class="active">🏠 Home</a>
+    <a href="sale.html">🔥 Sale</a>
+    <a href="compare.html">⚖️ Compare</a>
+    <a href="contact.html">📩 Contact</a>
+    <a href="about.html">ℹ️ About</a>
+  </div>
+
+  <nav class="navbar">
+    <h1>Off<span>Court</span></h1>
+    <div>
+      <button id="wishlist-btn">Wishlist (<span id="wish-count">0</span>)</button>
+      <button id="cart-btn">Cart (<span id="cart-count">0</span>)</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h2>Find Your <span>Perfect</span> Pair</h2>
+    <p>Premium sneakers for every style and sport.</p>
+  </div>
+
+  <div class="main">
+
+    <div class="stats-row">
+      <div class="stat-box"><div class="label">Total Products</div><div class="value" id="stat-total">0</div></div>
+      <div class="stat-box"><div class="label">Avg Price</div><div class="value" id="stat-avg">$0</div></div>
+      <div class="stat-box"><div class="label">Most Expensive</div><div class="value" id="stat-top">-</div></div>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="running">Running</button>
+      <button class="filter-btn" data-cat="casual">Casual</button>
+      <button class="filter-btn" data-cat="basketball">Basketball</button>
+      <input type="text" id="search-input" placeholder="Search..." />
+      <select id="sort-select">
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="name">Name A-Z</option>
+      </select>
+    </div>
+
+    <div class="product-grid" id="product-grid"></div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="sidebar" id="cart-sidebar">
+    <div class="sidebar-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" id="close-cart">X</button>
+    </div>
+    <div class="sidebar-body" id="cart-body"></div>
+    <div class="sidebar-footer" id="cart-footer" style="display:none;">
+      <div class="promo-row">
+        <input type="text" id="promo-input" placeholder="Promo code..." />
+        <button id="promo-btn">Apply</button>
+      </div>
+      <p class="promo-msg" id="promo-msg"></p>
+      <div class="discount-row" id="discount-row" style="display:none;">
+        <span>Discount</span><span id="discount-label"></span>
+      </div>
+      <div class="total-row">
+        <span>Total</span><span id="cart-total">$0.00</span>
+      </div>
+      <button class="checkout-btn" id="checkout-btn">Checkout</button>
+    </div>
+  </div>
+
+  <div class="sidebar" id="wish-sidebar">
+    <div class="sidebar-header">
+      <h3>Wishlist</h3>
+      <button class="close-btn" id="close-wish">X</button>
+    </div>
+    <div class="sidebar-body" id="wish-body"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

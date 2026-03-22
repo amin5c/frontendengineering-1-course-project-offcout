@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OffCourt — Sale</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .sale-banner { background: #e94560; color: white; text-align: center; padding: 14px; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+    .original-price { text-decoration: line-through; color: #888; font-size: 13px; margin-right: 6px; }
+    .sale-price { color: #e94560; font-size: 18px; font-weight: bold; }
+    .save-badge { background: #e94560; color: white; font-size: 11px; font-weight: bold; padding: 2px 6px; margin-left: 6px; }
+    .sale-stats { background: white; border: 2px solid #1a1a2e; padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 30px; flex-wrap: wrap; }
+    .sale-stats span { font-size: 13px; }
+    .sale-stats b { color: #e94560; }
+  </style>
+</head>
+<body>
+
+  <div class="page-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="sale.html" class="active">🔥 Sale</a>
+    <a href="compare.html">⚖️ Compare</a>
+    <a href="contact.html">📩 Contact</a>
+    <a href="about.html">ℹ️ About</a>
+  </div>
+
+  <nav class="navbar">
+    <h1>Off<span>Court</span> — 🔥 Sale</h1>
+  </nav>
+
+  <div class="sale-banner">LIMITED TIME DEALS — UP TO 30% OFF!</div>
+
+  <div class="main">
+    <div class="sale-stats" id="sale-stats"></div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-max="999">All Deals</button>
+      <button class="filter-btn" data-max="100">Under $100</button>
+      <button class="filter-btn" data-max="150">Under $150</button>
+      <select id="sort-sale">
+        <option value="saving-desc">Biggest Saving First</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+
+    <div class="product-grid" id="sale-grid"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  
+  const DISCOUNT_RATES = { running: 0.20, casual: 0.15, basketball: 0.25 }; 
+
+  
+  function calcSalePrice(price, rate, rounds) {
+    if (rounds <= 0) return price;
+    return calcSalePrice(price * (1 - rate / rounds), 0, 0); 
+  }
+
+  
+  function formatPrice(p, sym) {
+    if (sym === undefined) sym = "$";
+    return typeof p === "number" ? sym + p.toFixed(2) : sym + "0.00";
+  }
+
+  const sneakers = [
+    { id:1, name:"Air Velocity Pro",  brand:"SpeedX",     price:159.99, category:"running",    rating:4.7, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
+    { id:2, name:"Urban Classic",     brand:"StreetWear", price:89.99,  category:"casual",     rating:4.3, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
+    { id:3, name:"Court Dominator",   brand:"HoopKing",   price:199.99, category:"basketball", rating:4.9, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
+    { id:4, name:"Breeze Runner",     brand:"SpeedX",     price:129.99, category:"running",    rating:4.5, img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&h=350&fit=crop" },
+    { id:5, name:"Retro Vibe",        brand:"StreetWear", price:109.99, category:"casual",     rating:4.6, img:"https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&h=350&fit=crop" },
+    { id:6, name:"Shadow Elite",      brand:"HoopKing",   price:219.99, category:"basketball", rating:4.8, img:"https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&h=350&fit=crop" },
+    { id:7, name:"Trail Blazer X",    brand:"SpeedX",     price:174.99, category:"running",    rating:4.4, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
+    { id:8, name:"Daily Step",        brand:"StreetWear", price:69.99,  category:"casual",     rating:4.1, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
+    { id:9, name:"Slam Dunk Pro",     brand:"HoopKing",   price:189.99, category:"basketball", rating:4.7, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
+  ];
+
+  
+  const saleItems = sneakers.map(s => {
+    const rate      = DISCOUNT_RATES[s.category]; 
+    const salePrice = parseFloat((s.price * (1 - rate)).toFixed(2));
+    const saving    = parseFloat((s.price - salePrice).toFixed(2));
+    return { ...s, salePrice, saving, rate };
+  });
+
+  let maxPrice = 999, sortOpt = "saving-desc";
+
+  
+  function renderStats() {
+    const totalSaved  = saleItems.reduce((acc, s) => acc + s.saving, 0);
+    const cheapest    = saleItems.reduce((min, s) => s.salePrice < min.salePrice ? s : min);
+    const avgDiscount = saleItems.reduce((acc, s) => acc + s.rate, 0) / saleItems.length * 100;
+    document.getElementById("sale-stats").innerHTML =
+      "<span>Total items on sale: <b>" + saleItems.length + "</b></span>" +
+      "<span>Total you could save: <b>" + formatPrice(totalSaved) + "</b></span>" +
+      "<span>Cheapest deal: <b>" + cheapest.name + " @ " + formatPrice(cheapest.salePrice) + "</b></span>" +
+      "<span>Avg discount: <b>" + avgDiscount.toFixed(0) + "%</b></span>";
+  }
+
+  function renderSale() {
+    
+    var list = saleItems.filter(s => s.salePrice <= maxPrice);
+
+    
+    list = list.sort((a, b) => {
+      switch (sortOpt) {
+        case "saving-desc": return b.saving - a.saving;
+        case "price-asc":   return a.salePrice - b.salePrice;
+        case "rating":      return b.rating - a.rating;
+        default:            return 0;
+      }
+    });
+
+    const grid = document.getElementById("sale-grid");
+    if (list.length === 0) { grid.innerHTML = "<div class='empty-state'>No deals in this range.</div>"; return; }
+
+    
+    grid.innerHTML = list.map(s =>
+      "<div class='sneaker-card'>" +
+        "<img src='" + s.img + "' alt='" + s.name + "'>" +
+        "<div class='card-body'>" +
+          "<div class='card-brand'>" + s.brand + "</div>" +
+          "<div class='card-name'>" + s.name + "</div>" +
+          "<div class='card-rating'>★ " + s.rating + "</div>" +
+          "<div class='card-bottom'>" +
+            "<div>" +
+              "<span class='original-price'>" + formatPrice(s.price) + "</span>" +
+              "<span class='sale-price'>" + formatPrice(s.salePrice) + "</span>" +
+              "<span class='save-badge'>SAVE " + formatPrice(s.saving) + "</span>" +
+            "</div>" +
+          "</div>" +
+          "<button class='add-btn' style='width:100%;margin-top:10px;' onclick='addAndToast(\"" + s.name + "\")'>🛒 Add to Cart</button>" +
+        "</div>" +
+      "</div>"
+    ).join("");
+  }
+
+  function addAndToast(name) {
+    var el = document.getElementById("toast");
+    el.textContent = name + " added to cart!";
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 2500);
+  }
+
+  
+  var filterBtns = document.querySelectorAll(".filter-btn");
+  filterBtns.forEach(btn => btn.addEventListener("click", () => {
+    maxPrice = parseFloat(btn.getAttribute("data-max"));
+    filterBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderSale();
+  }));
+
+  document.getElementById("sort-sale").addEventListener("change", e => { sortOpt = e.target.value; renderSale(); });
+
+  renderStats();
+  renderSale();
+  </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OffCourt — Compare</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .compare-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+    @media (max-width: 600px) { .compare-wrap { grid-template-columns: 1fr; } }
+    .compare-slot { background: white; border: 2px solid #1a1a2e; padding: 16px; }
+    .compare-slot h3 { font-size: 14px; color: #888; text-transform: uppercase; margin-bottom: 10px; }
+    .compare-slot select { width: 100%; border: 2px solid #1a1a2e; padding: 6px 8px; font-size: 13px; background: white; margin-bottom: 12px; }
+    .compare-slot img { width: 100%; height: 180px; object-fit: cover; border: 2px solid #1a1a2e; margin-bottom: 12px; }
+    .compare-slot .placeholder { width: 100%; height: 180px; background: #f0f0f0; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 12px; }
+    .spec-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 13px; }
+    .spec-row span:last-child { font-weight: bold; }
+    .winner { color: #155724; background: #d4edda; padding: 1px 5px; }
+    .verdict-box { background: #1a1a2e; color: white; padding: 14px; text-align: center; border: 2px solid #e94560; }
+    .verdict-box h3 { color: #e94560; margin-bottom: 6px; }
+    .verdict-box p { font-size: 13px; color: #ccc; }
+    .vs-divider { display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #e94560; }
+  </style>
+</head>
+<body>
+
+  <div class="page-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="sale.html">🔥 Sale</a>
+    <a href="compare.html" class="active">⚖️ Compare</a>
+    <a href="contact.html">📩 Contact</a>
+    <a href="about.html">ℹ️ About</a>
+  </div>
+
+  <nav class="navbar">
+    <h1>Off<span>Court</span> — ⚖️ Compare</h1>
+  </nav>
+
+  <div class="hero" style="padding:20px;">
+    <h2>Compare <span>Sneakers</span></h2>
+    <p>Pick two sneakers and see which one wins.</p>
+  </div>
+
+  <div class="main">
+    <div class="compare-wrap">
+      <div class="compare-slot">
+        <h3>Sneaker A</h3>
+        <select id="pick-a" onchange="renderCompare()">
+          <option value="">-- Pick a sneaker --</option>
+        </select>
+        <div id="slot-a"><div class="placeholder">Select a sneaker</div></div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="compare-slot">
+        <h3>Sneaker B</h3>
+        <select id="pick-b" onchange="renderCompare()">
+          <option value="">-- Pick a sneaker --</option>
+        </select>
+        <div id="slot-b"><div class="placeholder">Select a sneaker</div></div>
+      </div>
+    </div>
+    <div id="verdict"></div>
+  </div>
+
+  <script>
+  
+  const sneakers = [
+    { id:1, name:"Air Velocity Pro",  brand:"SpeedX",     price:159.99, category:"running",    rating:4.7, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
+    { id:2, name:"Urban Classic",     brand:"StreetWear", price:89.99,  category:"casual",     rating:4.3, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
+    { id:3, name:"Court Dominator",   brand:"HoopKing",   price:199.99, category:"basketball", rating:4.9, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
+    { id:4, name:"Breeze Runner",     brand:"SpeedX",     price:129.99, category:"running",    rating:4.5, img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&h=350&fit=crop" },
+    { id:5, name:"Retro Vibe",        brand:"StreetWear", price:109.99, category:"casual",     rating:4.6, img:"https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&h=350&fit=crop" },
+    { id:6, name:"Shadow Elite",      brand:"HoopKing",   price:219.99, category:"basketball", rating:4.8, img:"https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&h=350&fit=crop" },
+    { id:7, name:"Trail Blazer X",    brand:"SpeedX",     price:174.99, category:"running",    rating:4.4, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
+    { id:8, name:"Daily Step",        brand:"StreetWear", price:69.99,  category:"casual",     rating:4.1, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
+    { id:9, name:"Slam Dunk Pro",     brand:"HoopKing",   price:189.99, category:"basketball", rating:4.7, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
+  ];
+
+  
+  function formatPrice(p, sym) {
+    if (sym === undefined) sym = "$";
+    return typeof p === "number" ? sym + p.toFixed(2) : sym + "0.00";
+  }
+
+  
+  function populateDropdowns() {
+    const opts = sneakers.map(s => "<option value='" + s.id + "'>" + s.name + "</option>").join("");
+    document.getElementById("pick-a").innerHTML += opts;
+    document.getElementById("pick-b").innerHTML += opts;
+  }
+
+  
+  function makeScoreTracker() {
+    var scoreA = 0, scoreB = 0; 
+    return {
+      aWins() { scoreA++; },
+      bWins() { scoreB++; },
+      getA()  { return scoreA; },
+      getB()  { return scoreB; },
+      reset() { scoreA = 0; scoreB = 0; }
+    };
+  }
+
+  function renderCompare() {
+    const idA = parseInt(document.getElementById("pick-a").value);
+    const idB = parseInt(document.getElementById("pick-b").value);
+
+    
+    if (!idA) { document.getElementById("slot-a").innerHTML = "<div class='placeholder'>Select a sneaker</div>"; }
+    if (!idB) { document.getElementById("slot-b").innerHTML = "<div class='placeholder'>Select a sneaker</div>"; }
+    if (!idA || !idB) { document.getElementById("verdict").innerHTML = ""; return; }
+    if (idA === idB) { document.getElementById("verdict").innerHTML = "<div class='verdict-box'><h3>Pick two different sneakers!</h3></div>"; return; }
+
+    
+    var a, b;
+    for (var i = 0; i < sneakers.length; i++) {
+      if (sneakers[i].id === idA) a = sneakers[i];
+      if (sneakers[i].id === idB) b = sneakers[i];
+    }
+
+    const tracker = makeScoreTracker();
+
+    
+    function specRow(label, valA, valB, lowerIsBetter) {
+      var aWins = lowerIsBetter ? valA < valB : valA > valB;
+      var bWins = lowerIsBetter ? valB < valA : valB > valA;
+      if (aWins) tracker.aWins();
+      if (bWins) tracker.bWins();
+      return "<div class='spec-row'>" +
+        "<span>" + label + "</span>" +
+        "<span class='" + (aWins ? "winner" : "") + "'>" + valA + "</span>" +
+        "<span class='" + (bWins ? "winner" : "") + "'>" + valB + "</span>" +
+      "</div>";
+    }
+
+    function renderSlot(slot, s) {
+      document.getElementById(slot).innerHTML =
+        "<img src='" + s.img + "' alt='" + s.name + "'>" +
+        "<div class='card-brand'>" + s.brand + "</div>" +
+        "<div class='card-name' style='margin-bottom:10px;'>" + s.name + "</div>" +
+        specRow("Price", formatPrice(s.price), "—", false) +
+        specRow("Rating", s.rating, "—", false) +
+        "<div class='spec-row'><span>Category</span><span>" + s.category + "</span><span></span></div>";
+    }
+
+    
+    var table =
+      "<div class='spec-row' style='font-weight:bold;background:#f0f0f0;'>" +
+        "<span>Spec</span><span>" + a.name + "</span><span>" + b.name + "</span>" +
+      "</div>" +
+      specRow("Price (lower better)", formatPrice(a.price), formatPrice(b.price), true) +
+      specRow("Rating (higher better)", a.rating, b.rating, false) +
+      "<div class='spec-row'><span>Brand</span><span>" + a.brand + "</span><span>" + b.brand + "</span></div>" +
+      "<div class='spec-row'><span>Category</span><span>" + a.category + "</span><span>" + b.category + "</span></div>";
+
+    document.getElementById("slot-a").innerHTML =
+      "<img src='" + a.img + "' alt='" + a.name + "'><div class='card-name'>" + a.name + "</div><div class='card-price'>" + formatPrice(a.price) + "</div>" + table;
+    document.getElementById("slot-b").innerHTML =
+      "<img src='" + b.img + "' alt='" + b.name + "'><div class='card-name'>" + b.name + "</div>";
+
+    
+    var winner = tracker.getA() > tracker.getB() ? a.name : tracker.getB() > tracker.getA() ? b.name : null;
+    var verdictText = winner
+      ? "🏆 <b>" + winner + "</b> wins on more specs!"
+      : "It's a tie! Both sneakers are equally matched.";
+
+    document.getElementById("verdict").innerHTML =
+      "<div class='verdict-box'><h3>Verdict</h3><p>" + verdictText + "</p>" +
+      "<p style='margin-top:6px;'>" + a.name + ": " + tracker.getA() + " pts &nbsp;|&nbsp; " + b.name + ": " + tracker.getB() + " pts</p></div>";
+  }
+
+  populateDropdowns();
+  </script>
+</body>
+</html>
