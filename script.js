@@ -8,15 +8,15 @@ let   lastSearch = undefined;
 console.log(typeof STORE_NAME, typeof TAX_RATE, typeof IS_OPEN, typeof null, typeof SID, typeof BIG);
 
 const sneakers = [
-  { id:1, name:"Air Velocity Pro",  brand:"SpeedX",     price:159.99, category:"running",    rating:4.7, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
-  { id:2, name:"Urban Classic",     brand:"StreetWear", price:89.99,  category:"casual",     rating:4.3, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
-  { id:3, name:"Court Dominator",   brand:"HoopKing",   price:199.99, category:"basketball", rating:4.9, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
-  { id:4, name:"Breeze Runner",     brand:"SpeedX",     price:129.99, category:"running",    rating:4.5, img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&h=350&fit=crop" },
-  { id:5, name:"Retro Vibe",        brand:"StreetWear", price:109.99, category:"casual",     rating:4.6, img:"https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&h=350&fit=crop" },
-  { id:6, name:"Shadow Elite",      brand:"HoopKing",   price:219.99, category:"basketball", rating:4.8, img:"https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&h=350&fit=crop" },
-  { id:7, name:"Trail Blazer X",    brand:"SpeedX",     price:174.99, category:"running",    rating:4.4, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=350&fit=crop" },
-  { id:8, name:"Daily Step",        brand:"StreetWear", price:69.99,  category:"casual",     rating:4.1, img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&h=350&fit=crop" },
-  { id:9, name:"Slam Dunk Pro",     brand:"HoopKing",   price:189.99, category:"basketball", rating:4.7, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=350&fit=crop" },
+  { id:1, name:"Air Velocity Pro",  brand:"SpeedX",     price:159.99, category:"running",    rating:4.7, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/e/9/e9a821bNike-IF4391-100_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:2, name:"Urban Classic",     brand:"StreetWear", price:89.99,  category:"casual",     rating:4.3, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/b/0/b0e4965Nike-IR5776-400_1.png?rnd=20200526195200&tr=w-1080" },
+  { id:3, name:"Court Dominator",   brand:"HoopKing",   price:199.99, category:"basketball", rating:4.9, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/5/3/5324c8eNike-554724-069_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:4, name:"Breeze Runner",     brand:"SpeedX",     price:129.99, category:"running",    rating:4.5, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/5/3/5324c8eNike-IU2363-100_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:5, name:"Retro Vibe",        brand:"StreetWear", price:109.99, category:"casual",     rating:4.6, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/5/3/5324c8eNike-IB7746-200_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:6, name:"Shadow Elite",      brand:"HoopKing",   price:219.99, category:"basketball", rating:4.8, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/5/3/5324c8eNike-DN3577-700_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:7, name:"Trail Blazer X",    brand:"SpeedX",     price:174.99, category:"running",    rating:4.4, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/5/3/5324c8eNike-IM4692-200_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:8, name:"Daily Step",        brand:"StreetWear", price:69.99,  category:"casual",     rating:4.1, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/9/f/9fe448dNike-IB6606-600_1.jpg?rnd=20200526195200&tr=w-1080" },
+  { id:9, name:"Slam Dunk Pro",     brand:"HoopKing",   price:189.99, category:"basketball", rating:4.7, img:"https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/f/f/ff7c9fbNike-DZ5485-003_1.jpg?rnd=20200526195200&tr=w-1080" },
 ];
 
 let activeCat = "all", sortOpt = "price-asc", searchQ = "", cart = [], discount = 0;
