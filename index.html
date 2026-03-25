@@ -8,11 +8,11 @@
 <body>
 
   <div class="page-nav">
-    <a href="index.html" class="active">🏠 Home</a>
-    <a href="sale.html">🔥 Sale</a>
-    <a href="compare.html">⚖️ Compare</a>
-    <a href="contact.html">📩 Contact</a>
-    <a href="about.html">ℹ️ About</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="sale.html">Sale</a>
+    <a href="compare.html">Compare</a>
+    <a href="contact.html">Contact</a>
+    <a href="about.html">About</a>
   </div>
 
   <nav class="navbar">
@@ -31,9 +31,18 @@
   <div class="main">
 
     <div class="stats-row">
-      <div class="stat-box"><div class="label">Total Products</div><div class="value" id="stat-total">0</div></div>
-      <div class="stat-box"><div class="label">Avg Price</div><div class="value" id="stat-avg">$0</div></div>
-      <div class="stat-box"><div class="label">Most Expensive</div><div class="value" id="stat-top">-</div></div>
+      <div class="stat-box">
+        <div class="label">Total Products</div>
+        <div class="value" id="stat-total">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Avg Price</div>
+        <div class="value" id="stat-avg">$0</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Most Expensive</div>
+        <div class="value" id="stat-top">-</div>
+      </div>
     </div>
 
     <div class="filter-row">
@@ -70,10 +79,12 @@
       </div>
       <p class="promo-msg" id="promo-msg"></p>
       <div class="discount-row" id="discount-row" style="display:none;">
-        <span>Discount</span><span id="discount-label"></span>
+        <span>Discount</span>
+        <span id="discount-label"></span>
       </div>
       <div class="total-row">
-        <span>Total</span><span id="cart-total">$0.00</span>
+        <span>Total</span>
+        <span id="cart-total">$0.00</span>
       </div>
       <button class="checkout-btn" id="checkout-btn">Checkout</button>
     </div>
@@ -86,6 +97,7 @@
     </div>
     <div class="sidebar-body" id="wish-body"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
